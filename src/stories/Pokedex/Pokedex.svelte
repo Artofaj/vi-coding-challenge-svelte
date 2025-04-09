@@ -11,8 +11,7 @@
 
   let filteredByType: PokemonEntryType[] = [];
   let allPokemon: PokemonEntryType[] = [];
-  let filters: PokemonTypes[] = [];
-  let hasFilters = false;
+  let selectedType: PokemonTypes | null = null;
 
   onMount(async () => {
     const response = await fetch(
@@ -32,12 +31,10 @@
   };
 
   $: {
-    hasFilters = filters.length > 0;
-
-    if (hasFilters) {
-      fetchByType(filters[0]);
+    if (selectedType) {
+      fetchByType(selectedType);
     }
-    console.log(filters);
+    console.log(selectedType);
   }
 </script>
 
@@ -48,13 +45,13 @@
     </div>
   {/if}
   <aside>
-    <TypesFilter />
-    <button on:click={() => (filters = hasFilters ? [] : ["normal"])}
+    <TypesFilter bind:selectedType />
+    <!--     <button on:click={() => (filters = hasFilters ? [] : ["normal"])}
       >filter</button
-    >
+    > -->
   </aside>
 
-  <PokemonRoll pokemonList={hasFilters ? filteredByType : allPokemon} />
+  <PokemonRoll pokemonList={selectedType ? filteredByType : allPokemon} />
 </div>
 
 <style>
