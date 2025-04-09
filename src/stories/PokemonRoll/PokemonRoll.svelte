@@ -3,21 +3,19 @@
   import type { PokemonEntryType } from "../PokemonEntry/PokemonEntryType";
 
   export let pokemonList: PokemonEntryType[];
-
-  $: {
-    console.log(pokemonList);
-  }
 </script>
 
-<ul class="pokemon-list">
-  {#if pokemonList}
+{#if pokemonList.length > 0}
+  <ul class="pokemon-list">
     {#each pokemonList as pokemon}
       <li>
         <PokemonEntry name={pokemon.name} />
       </li>
     {/each}
-  {/if}
-</ul>
+  </ul>
+{:else}
+  <p>No pokemon found</p>
+{/if}
 
 <style>
   .pokemon-list {
