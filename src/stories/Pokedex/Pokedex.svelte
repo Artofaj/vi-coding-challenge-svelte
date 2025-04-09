@@ -4,37 +4,42 @@
   import type { PokemonEntryType } from "../PokemonEntry/PokemonEntryType";
   import type { PokemonTypes } from "../TypeBadge/colors";
   import PokemonRoll from "../PokemonRoll/PokemonRoll.svelte";
+  import Loader from "../Loader/Loader.svelte";
 
-  const MAX_POKEMON_PER_PAGE = 5;
+  const MAX_POKEMON_PER_PAGE = 50;
 
   export let title: string | undefined;
 
   let filteredByType: PokemonEntryType[] = [];
   let allPokemon: PokemonEntryType[] = [];
   let selectedType: PokemonTypes | null = null;
+  let isLoading: boolean;
 
   onMount(async () => {
+    isLoading = true;
     const response = await fetch(
       `https://pokeapi.co/api/v2/pokemon?limit=${MAX_POKEMON_PER_PAGE}`
     );
     const data = await response.json();
     allPokemon = data.results;
+    isLoading = false;
   });
 
   const fetchByType = async (type: PokemonTypes) => {
+    isLoading = true;
     const response = await fetch(`https://pokeapi.co/api/v2/type/${type}`);
     const data = await response.json();
     const pokemon = data.pokemon.map((pokemon: any) => pokemon.pokemon);
     const paginatedPokemon = pokemon.slice(0, MAX_POKEMON_PER_PAGE);
 
     filteredByType = paginatedPokemon;
+    isLoading = false;
   };
 
   $: {
     if (selectedType) {
       fetchByType(selectedType);
     }
-    console.log(selectedType);
   }
 </script>
 
@@ -46,12 +51,13 @@
   {/if}
   <aside>
     <TypesFilter bind:selectedType />
-    <!--     <button on:click={() => (filters = hasFilters ? [] : ["normal"])}
-      >filter</button
-    > -->
   </aside>
 
-  <PokemonRoll pokemonList={selectedType ? filteredByType : allPokemon} />
+  {#if isLoading}
+    <Loader>Loading pokemon</Loader>
+  {:else}
+    <PokemonRoll pokemonList={selectedType ? filteredByType : allPokemon} />
+  {/if}
 </div>
 
 <style>

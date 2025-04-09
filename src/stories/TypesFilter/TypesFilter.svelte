@@ -2,26 +2,28 @@
   import { onMount } from "svelte";
   import type { PokemonTypes } from "../TypeBadge/colors";
   import TypeBadge from "../TypeBadge/TypeBadge.svelte";
+  import Loader from "../Loader/Loader.svelte";
 
   let types: PokemonTypes[] = [];
-  let loading = true;
+  let isLoading = true;
 
   export let selectedType: PokemonTypes | null = null;
 
   onMount(async () => {
+    isLoading = false;
     const response = await fetch("https://pokeapi.co/api/v2/type/");
     const data = await response.json();
 
     types = data.results.map((type: any) => type.name);
-    loading = false;
+    isLoading = false;
   });
 </script>
 
 <form class="outer-container">
   <h1>Filter</h1>
   <h2>Types</h2>
-  {#if loading}
-    <p>Loading...</p>
+  {#if isLoading}
+    <Loader>Getting the types</Loader>
   {:else}
     {#each types as type}
       <label>

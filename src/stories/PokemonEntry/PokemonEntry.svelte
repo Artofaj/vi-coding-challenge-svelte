@@ -2,19 +2,26 @@
   import { onMount } from "svelte";
   import TypeBadge from "../TypeBadge/TypeBadge.svelte";
   import type { PokemonEntryType } from "./PokemonEntryType";
-
-  let pokemon: PokemonEntryType | undefined;
+  import Loader from "../Loader/Loader.svelte";
 
   export let name: string;
 
+  let pokemon: PokemonEntryType | undefined;
+  let isLoading: boolean;
+
   onMount(async () => {
+    isLoading = true;
     const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
     const data = await res.json();
     pokemon = data;
+    isLoading = false;
   });
 </script>
 
-<div class="pokemon-entry">
+<div class="pokemon-entry" class:loading={isLoading}>
+  {#if isLoading}
+    <Loader />
+  {/if}
   {#if pokemon}
     <div class="pokemon-id">#{pokemon.id}</div>
     <div class="pokemon-sprite-container">
@@ -46,6 +53,12 @@
     position: relative;
     flex-direction: column;
     box-sizing: border-box;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .loading {
+    opacity: 0.5;
   }
 
   .pokemon-entry h2 {
@@ -61,6 +74,7 @@
   .pokemon-sprite-container img {
     width: 100%;
     height: 90%;
+    color: red;
   }
 
   .pokemon-id {
