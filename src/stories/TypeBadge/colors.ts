@@ -22,4 +22,6 @@ export const typeColors = {
     stellar: "#727272",
 };
 
+export const allPokemonTypes = Object.keys(typeColors) as (keyof typeof typeColors)[];
+
 export type PokemonTypes = keyof typeof typeColors;
