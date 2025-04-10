@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { onMount } from "svelte";
   import TypeBadge from "../TypeBadge/TypeBadge.svelte";
   import type { PokemonEntryType } from "./PokemonEntryType";
   import Loader from "../Loader/Loader.svelte";
@@ -9,13 +8,18 @@
   let pokemon: PokemonEntryType | undefined;
   let isLoading: boolean;
 
-  onMount(async () => {
+  const fetchPokemon = async (name: string) => {
     isLoading = true;
+    pokemon = undefined;
     const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
     const data = await res.json();
     pokemon = data;
     isLoading = false;
-  });
+  };
+
+  $: {
+    fetchPokemon(name);
+  }
 </script>
 
 <div class="pokemon-entry" class:loading={isLoading}>
