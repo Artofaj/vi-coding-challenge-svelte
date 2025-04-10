@@ -90,7 +90,7 @@
 
   .pokemon-name-container {
     border-top: var(--border);
-    padding: 0 var(--space-medium);
+    padding: 0 var(--space-small);
     position: absolute;
     bottom: 0;
     width: 100%;
