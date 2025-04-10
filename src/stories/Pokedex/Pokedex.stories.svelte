@@ -5,13 +5,11 @@
   const { Story } = defineMeta({
     title: "Pokedex",
     component: Pokedex,
+    tags: ["autodocs"],
+    argTypes: {
+      title: { control: "text" },
+    },
   });
 </script>
 
-<Story name="Default">
-  <Pokedex />
-</Story>
-
-<Story name="With header">
-  <Pokedex title="These are our products" />
-</Story>
+<Story name="Default" args={{ title: "These are our products" }} />
