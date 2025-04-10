@@ -1,4 +1,4 @@
-import type { StorybookConfig } from '@storybook/svelte-vite';
+import type { StorybookConfig } from '@storybook/sveltekit';
 
 const config: StorybookConfig = {
   "stories": [
@@ -12,7 +12,7 @@ const config: StorybookConfig = {
     "@storybook/experimental-addon-test"
   ],
   "framework": {
-    "name": "@storybook/svelte-vite",
+    "name": "@storybook/sveltekit",
     "options": {}
   }
 };
